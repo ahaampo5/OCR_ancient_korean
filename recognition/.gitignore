@@ -1,0 +1,31 @@
+# data
+train_dataset/**
+input/**
+submission.txt
+submit/**
+
+# model config
+# configs/**
+
+# sketches
+sketches/**
+
+# log, chache
+events*
+log.txt
+__pycache__
+.idea
+checkpoints/**
+tensorboard/**
+*.pth
+.DS_Store
+wandb/**
+log/**
+
+# etc
+.empty/**
+.vscode/**
+.ipynb_checkpoints/**
+
+# wandb
+wandb
