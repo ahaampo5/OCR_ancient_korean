@@ -8,3 +8,8 @@ mmdet/
 mmcv_custom/
 configs/
 
+privious/
+pth/
+
+.ipynb_checkpoints/
+
