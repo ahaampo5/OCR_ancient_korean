@@ -4,6 +4,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import cv2
 import albumentations as A
+from albumentations.pytorch.transforms import ToTensorV2
 
 from utils import load_vocab
 
@@ -28,8 +29,8 @@ class MyDataset(Dataset):
         if self.transforms is not None:
             image = self.transforms(image=image)['image']
         
-        # if self.mode != 'train':
-        #     return image
+        if self.mode == 'test':
+            return image
 
         label = path[-10:-4].split('-')
 
@@ -43,69 +44,20 @@ class MyDataset(Dataset):
         return len(self.image_paths)
     
 
-class LoadDataset(Dataset):
-    def __init__(
-        self,
-        groundtruth: str,
-        tokens_file: str,
-        crop: bool = False,
-        preprocessing=True,
-        transform=None,
-        rgb=3,
-    ):
-        """
-        Args:
-            groundtruth (string): Path to ground truth TXT/TSV file
-            tokens_file (string): Path to tokens TXT file
-            ext (string): Extension of the input files
-            crop (bool, optional): Crop images to their bounding boxes [Default: False]
-            transform (callable, optional): Optional transform to be applied
-                on a sample.
-        """
+def get_train_transforms():
+    return A.Compose([
+        A.Resize(224,224),
+        A.RandomBrightness(limit=0.05),
+        A.RandomContrast(limit=0.05),
+        A.OpticalDistortion(distort_limit=0.01, shift_limit=0.01),
+        A.GaussNoise(var_limit=10.0),
+        A.Normalize(),
+        ToTensorV2()
+    ])
 
-        super(LoadDataset, self).__init__()
-        self.crop = crop
-        self.preprocessing = preprocessing
-        self.transform = transform
-        self.rgb = rgb
-        self.token_to_id, self.id_to_token = load_vocab(tokens_file)
-        self.data = [
-            {
-                "path": p,
-                "truth": {
-                    "text": truth,
-                    "encoded": [
-                        self.token_to_id[START],
-                        *encode_truth(truth, self.token_to_id),
-                        self.token_to_id[END],
-                    ],
-                },
-            }
-            for p, truth in groundtruth
-        ]
-
-    def __len__(self):
-        return len(self.data)
-
-    def __getitem__(self, i):
-        item = self.data[i]
-        image = Image.open(item["path"])
-        if self.rgb == 3:
-            image = image.convert("RGB")
-        elif self.rgb == 1:
-            image = image.convert("L")
-        else:
-            raise NotImplementedError
-
-        if self.crop:
-            bounding_box = ImageOps.invert(image).getbbox()
-            image = image.crop(bounding_box)
-
-        if self.transform:
-            w, h = image.size
-            if h / w > 2:
-                image = image.rotate(90, expand=True)
-            image = np.array(image)
-            image = self.transform(image=image)["image"]
-
-        return {"path": item["path"], "truth": item["truth"], "image": image}
+def get_valid_transforms():
+    return A.Compose([
+        A.Resize(224,224),
+        A.Normalize(),
+        ToTensorV2()
+    ])

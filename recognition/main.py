@@ -1,5 +1,6 @@
 import os
 import time
+import random
 from glob import glob
 from tqdm import tqdm
 import yaml
@@ -13,7 +14,7 @@ import albumentations as A
 from albumentations.pytorch.transforms import ToTensorV2
 
 from utils import set_seed, id_to_string, word_error_rate, sentence_acc
-from dataset import MyDataset
+from dataset import MyDataset, get_train_transforms, get_valid_transforms
 from model import SWIN
 from scheduler import (
     CustomCosineAnnealingWarmUpRestarts,
@@ -191,22 +192,18 @@ def main(config):
 
     image_paths = glob('/content/data/크랍이미지/*')
 
-    image_paths = image_paths[:len(image_paths)//10]
+    random.shuffle(image_paths)
 
-    train_transforms = A.Compose([
-        A.Resize(224,224),
-        A.Normalize(),
-        ToTensorV2()
-    ])
+    train_image_paths = image_paths[len(image_paths)//2:]
 
-    valid_transforms = A.Compose([
-        A.Resize(224,224),
-        A.Normalize(),
-        ToTensorV2()
-    ])
+    valid_image_paths = image_paths[:len(image_paths)//5]
 
-    train_dataset = MyDataset(image_paths, transforms=train_transforms, mode='train')
-    valid_dataset = MyDataset(image_paths, transforms=valid_transforms, mode='valid')
+    train_transforms = get_train_transforms()
+
+    valid_transforms = get_valid_transforms()
+
+    train_dataset = MyDataset(train_image_paths, transforms=train_transforms, mode='train')
+    valid_dataset = MyDataset(valid_image_paths, transforms=valid_transforms, mode='valid')
     train_loader = DataLoader(
         train_dataset, batch_size=config.batch_size, shuffle=True,
         num_workers=0, pin_memory=True, drop_last=True,
@@ -301,9 +298,9 @@ def main(config):
 
         if best_score < 0.9*valid_epoch_sentence_accuracy + \
                     0.1*(1-valid_epoch_wer):
-            torch.save(model.state_dict(), '/content/drive/Othercomputers/내 컴퓨터/workspace/ocr_ancient_korean/recognition/pth/model.pth')
             best_score = 0.9*valid_epoch_sentence_accuracy + \
                     0.1*(1-valid_epoch_wer)
+            torch.save(model.state_dict(), f'./pth/model_{epoch}_{best_score*100:.02f}.pth')
             print(f'Best score : {best_score}')
             print('model saved')
 
