@@ -1,5 +1,4 @@
 from glob import glob
-from tqdm import tqdm
 
 import torch
 from torch import nn, optim
@@ -9,7 +8,7 @@ from .utils import id_to_string, set_seed, load_vocab
 from .dataset import MyDataset, get_valid_transforms
 from .model import SWIN
 
-token_to_id, id_to_token = load_vocab('./token.txt')
+token_to_id, id_to_token = load_vocab(['./token.txt'])
 
 class CFG:
     seed = 21
@@ -39,8 +38,9 @@ test_loader = DataLoader(
 )
 
 model = SWIN(test_dataset)
-checkpoint = torch.load(config.checkpoint_path)
+checkpoint = torch.load(config.checkpoint_path, map_location=device)
 model_checkpoint = checkpoint
 model.load_state_dict(model_checkpoint)
 model.eval()
 model.to(device)
+

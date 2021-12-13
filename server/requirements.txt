@@ -1,6 +1,8 @@
 flask
 flask_cors
+editdistance
 
+opencv-python==3.4.4.19
 albumentations==0.5.2
 editdistance==0.5.3
 matplotlib==3.4.2

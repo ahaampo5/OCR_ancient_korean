@@ -1023,8 +1023,8 @@ class SWIN(nn.Module):
             window_size=7, mlp_ratio=4.,num_classes=1000,
             drop_path_rate=0.2, ape=True) 
         
-        state_dict = torch.hub.load_state_dict_from_url('https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth')
-        self.encoder.load_state_dict(state_dict['model'], strict=False)
+        # state_dict = torch.hub.load_state_dict_from_url('https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth')
+        # self.encoder.load_state_dict(state_dict['model'], strict=False)
 
         self.decoder = TransformerDecoder(
             num_classes=len(train_dataset.id_to_token),

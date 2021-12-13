@@ -28,7 +28,7 @@ def load_vocab(tokens_paths: str) -> Tuple[Dict[str, int], Dict[int, str]]:
     tokens = []
     tokens.extend(SPECIAL_TOKENS)
     for tokens_file in tokens_paths:
-        with open(tokens_file, "r") as fd:
+        with open(tokens_file, "r", encoding='utf-8') as fd:
             reader = fd.read()
             for token in reader.split("\n"):
                 if token not in tokens:

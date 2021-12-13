@@ -1,6 +1,6 @@
 from . import model, token_to_id, id_to_token, device
-from utils import id_to_string
-from dataset import get_valid_transforms
+from .utils import id_to_string
+from .dataset import get_valid_transforms
 import torch
 
 START = "<SOS>"
