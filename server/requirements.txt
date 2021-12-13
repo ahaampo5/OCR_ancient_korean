@@ -1,5 +1,4 @@
 flask
-Pillow
 flask_cors
 
 albumentations==0.5.2

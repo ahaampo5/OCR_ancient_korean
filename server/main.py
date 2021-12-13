@@ -13,7 +13,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 cors = CORS(app)
 
 
-@app.route("/susik_recognize", methods=["POST"])
+@app.route("/recognize", methods=["POST"])
 @cross_origin()
 def susik_recognize():
     image = request.json['image']
