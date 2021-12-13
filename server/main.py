@@ -3,7 +3,7 @@ from PIL import Image
 import base64
 import json
 import io
-from inference import inference
+from app.inference import inference
 from flask_cors import CORS, cross_origin
 
 

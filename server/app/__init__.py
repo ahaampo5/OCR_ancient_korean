@@ -5,16 +5,11 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
 
-from utils import id_to_string, set_seed, load_vocab
-from dataset import MyDataset, get_valid_transforms
-from model import SWIN
+from .utils import id_to_string, set_seed, load_vocab
+from .dataset import MyDataset, get_valid_transforms
+from .model import SWIN
 
 token_to_id, id_to_token = load_vocab('./token.txt')
-
-START = "<SOS>"
-END = "<EOS>"
-PAD = "<PAD>"
-SPECIAL_TOKENS = [START, END, PAD]
 
 class CFG:
     seed = 21

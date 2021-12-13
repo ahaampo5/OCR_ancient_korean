@@ -1,3 +1,5 @@
+import os
+
 import torch
 from torch import nn
 from torch.utils.data import Dataset
@@ -6,7 +8,7 @@ import cv2
 import albumentations as A
 from albumentations.pytorch.transforms import ToTensorV2
 
-from utils import load_vocab
+from .utils import load_vocab
 
 START = "<SOS>"
 END = "<EOS>"
@@ -14,7 +16,7 @@ PAD = "<PAD>"
 SPECIAL_TOKENS = [START, END, PAD]
 
 class MyDataset(Dataset):
-    def __init__(self, image_paths, tokens_path=['./token.txt'], transforms=None, mode='train'):
+    def __init__(self, image_paths, tokens_path=[os.path.join('.', 'token.txt')], transforms=None, mode='train'):
         self.image_paths = image_paths
         self.token_to_id, self.id_to_token = load_vocab(tokens_path)
         self.transforms = transforms
