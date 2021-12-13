@@ -1,4 +1,4 @@
-const SERVERL_URL='';
+const SERVERL_URL ='http://	ec2-13-125-210-255.ap-northeast-2.compute.amazonaws.com:5000/recognize';
 
 fetch(chrome.runtime.getURL('/template.html')).then(r => r.text()).then(html => {
     document.body.insertAdjacentHTML('beforeend', html);
