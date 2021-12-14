@@ -1,4 +1,4 @@
-const SERVERL_URL ='http://	ec2-13-125-210-255.ap-northeast-2.compute.amazonaws.com:5000/recognize';
+const SERVERL_URL ='http://172.31.32.234:6006/recognize';
 
 fetch(chrome.runtime.getURL('/template.html')).then(r => r.text()).then(html => {
     document.body.insertAdjacentHTML('beforeend', html);
@@ -10,28 +10,28 @@ let selectBoxY = -1
 
 document.body.addEventListener('click', e=>{
     //하단에 박스 닫는 버튼 클릭시
-    if (e.target.id =='susik-close'){
+    if (e.target.id =='hangeul-close'){
         let showBox = document.querySelector('#show-box');
-        let susikBox = document.querySelector('#susik-box');
-        let susikOutput = document.querySelector('#susik-output');
-        let susikImage = document.querySelector('#susik-image');
+        let hangeulBox = document.querySelector('#hangeul-box');
+        let hangeulOutput = document.querySelector('#hangeul-output');
+        let hangeulImage = document.querySelector('#hangeul-image');
 
         //관련된 UI들 초기화
         showBox.style.display = 'none';
-        susikBox.style.width='0px';
-        susikBox.style.height='0px';
-        susikBox.style.top="-1px";
-        susikBox.style.left="-1px";
-        susikOutput.value = '';
-        susikImage.src = 'https://via.placeholder.com/800x200?text=image';        
+        hangeulBox.style.width='0px';
+        hangeulBox.style.height='0px';
+        hangeulBox.style.top="-1px";
+        hangeulBox.style.left="-1px";
+        hangeulOutput.value = '';
+        hangeulImage.src = 'https://via.placeholder.com/800x200?text=image';        
     }
 });
 
 
 document.body.addEventListener('mousedown', e => {
-    var isActivated = document.querySelector('#susik-box').getAttribute("data-activate");
-    let susikBox = document.querySelector('#susik-box');
-    susikBox.style.display='block';
+    var isActivated = document.querySelector('#hangeul-box').getAttribute("data-activate");
+    let hangeulBox = document.querySelector('#hangeul-box');
+    hangeulBox.style.display='block';
 
     if(isActivated=="true"){
         let x = e.clientX;
@@ -40,11 +40,11 @@ document.body.addEventListener('mousedown', e => {
         selectBoxX = x;
         selectBoxY = y;
         
-        //Susik Box이 위치와 사이즈를 현재 지점에서 초기화
-        susikBox.style.top = y+'px';
-        susikBox.style.left = x+'px';
-        susikBox.style.width='0px';
-        susikBox.style.height='0px';
+        //hangeul Box이 위치와 사이즈를 현재 지점에서 초기화
+        hangeulBox.style.top = y+'px';
+        hangeulBox.style.left = x+'px';
+        hangeulBox.style.width='0px';
+        hangeulBox.style.height='0px';
     }
 });
 
@@ -52,8 +52,8 @@ document.body.addEventListener('mousedown', e => {
 //캡쳐가 준비된 상태에서 (마우스 클릭이 된 상태) 드래그시 박스 사이즈 업데이트
 document.body.addEventListener('mousemove', e => {
     try{
-        var susikBox = document.querySelector('#susik-box');
-        var isActivated = susikBox.getAttribute("data-activate");
+        var hangeulBox = document.querySelector('#hangeul-box');
+        var isActivated = hangeulBox.getAttribute("data-activate");
     }catch(e){
         return;
     }
@@ -63,20 +63,20 @@ document.body.addEventListener('mousemove', e => {
         let x = e.clientX;
         let y = e.clientY;
 
-        //Select 박스(susik-box)의 가로 세로를 마우스 이동에 맞게 변경
+        //Select 박스(hangeul-box)의 가로 세로를 마우스 이동에 맞게 변경
         width = x-selectBoxX;
         height = y-selectBoxY;
         
-        susikBox.style.width = width+'px';
-        susikBox.style.height = height+'px';
+        hangeulBox.style.width = width+'px';
+        hangeulBox.style.height = height+'px';
         
     }
 });
 
 // 마우스 드래그가 끝난 시점 (드랍)
 document.body.addEventListener('mouseup', e => {
-    let susikBox = document.querySelector('#susik-box');
-    let isActivated = susikBox.getAttribute("data-activate");
+    let hangeulBox = document.querySelector('#hangeul-box');
+    let isActivated = hangeulBox.getAttribute("data-activate");
     
     //만약 팝업의 start 버튼을 클릭한 후의, 그냥 취소
     if(isActivated=="false"){
@@ -84,25 +84,25 @@ document.body.addEventListener('mouseup', e => {
     }
 
     // 다음 이벤트가 ??
-    susikBox.setAttribute("data-activate", "false");
+    hangeulBox.setAttribute("data-activate", "false");
     
     
     
     let x = parseInt(selectBoxX);
     let y = parseInt(selectBoxY);
-    let w = parseInt(susikBox.style.width);
-    let h = parseInt(susikBox.style.height);
+    let w = parseInt(hangeulBox.style.width);
+    let h = parseInt(hangeulBox.style.height);
     
-    //캡쳐 과정이 끝났으므로, susik-box 관련된 내용 초기화
+    //캡쳐 과정이 끝났으므로, hangeul-box 관련된 내용 초기화
     selectBoxX = -1;
     selectBoxY = -1;
     
     
-    susikBox.style.display='none';
-    susikBox.style.width='0px';
-    susikBox.style.height='0px';
-    susikBox.style.top="-1px";
-    susikBox.style.left="-1px";
+    hangeulBox.style.display='none';
+    hangeulBox.style.width='0px';
+    hangeulBox.style.height='0px';
+    hangeulBox.style.top="-1px";
+    hangeulBox.style.left="-1px";
 
     //Overaly 화면 안보이게 초기화
     document.querySelector('#overlay').style.display='none';
@@ -127,7 +127,7 @@ document.body.addEventListener('mouseup', e => {
                 var croppedURL=cropPlusExport(img,x*ratio,y*ratio,w*ratio,h*ratio);
                 var cropImg=new Image();
                 cropImg.src=croppedURL;
-                document.querySelector('#susik-image').src = croppedURL;
+                document.querySelector('#hangeul-image').src = croppedURL;
                 fetch(SERVERL_URL, {
                     method: 'POST',
                     body: JSON.stringify({"image":croppedURL}), // data can be `string` or {object}!
@@ -136,7 +136,7 @@ document.body.addEventListener('mouseup', e => {
                     }
                 }).then(res => res.json())
                 .then(response => {    
-                    document.querySelector('#susik-output').value = response['result'];
+                    document.querySelector('#hangeul-output').value = response['result'];
                 });
             }
     
