@@ -38,7 +38,7 @@ test_loader = DataLoader(
 )
 
 model = SWIN(test_dataset)
-checkpoint = torch.load(config.checkpoint_path, map_location=device)
+checkpoint = torch.load(config.checkpoint_path, map_location='cpu')
 model_checkpoint = checkpoint
 model.load_state_dict(model_checkpoint)
 model.eval()
