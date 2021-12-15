@@ -32,7 +32,7 @@ class MyDataset(Dataset):
             image = self.transforms(image=image)['image']
         
         if self.mode == 'test':
-            dummy_gt = "ᄀ" * 3
+            dummy_gt = ["ᄀ"] * 3
             label = torch.Tensor(
                 [self.token_to_id[START]] + [self.token_to_id[i] for i in dummy_gt]\
                 + [self.token_to_id[END]]).long()

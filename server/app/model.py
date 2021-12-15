@@ -908,7 +908,7 @@ class PositionEncoder1D(nn.Module):
             out = x + self.position_encoder[:, : x.size(1), :].to(x.get_device())
             out = self.dropout(out)
         else:
-            out = x + self.position_encoder[:, point, :].unsqueeze(1).to(x.get_device())
+            out = x + self.position_encoder[:, point, :].unsqueeze(1).to('cpu')
         return out
 
 

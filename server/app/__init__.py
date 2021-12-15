@@ -8,7 +8,7 @@ from .utils import id_to_string, set_seed, load_vocab
 from .dataset import MyDataset, get_valid_transforms
 from .model import SWIN
 
-token_to_id, id_to_token = load_vocab(['./token.txt'])
+token_to_id, id_to_token = load_vocab(['.\\token.txt'])
 
 class CFG:
     seed = 21
@@ -22,6 +22,7 @@ set_seed(21)
 
 hardware = 'cuda' if is_cuda else 'cpu'
 device = torch.device(hardware)
+print(device)
 
 transforms = get_valid_transforms()
 
@@ -39,6 +40,7 @@ test_loader = DataLoader(
 
 model = SWIN(test_dataset)
 checkpoint = torch.load(config.checkpoint_path, map_location='cpu')
+
 model_checkpoint = checkpoint
 model.load_state_dict(model_checkpoint)
 model.eval()

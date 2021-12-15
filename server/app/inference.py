@@ -12,14 +12,15 @@ def inference(image): # h, w, c
     image = get_valid_transforms()(image=image)['image']
 
     dummy_gt = "ᄀ" * 3
-    label = torch.Tensor(
-        [token_to_id[START]] + [[token_to_id[i]] for i in dummy_gt]\
-            + [token_to_id[END]]).long()
+
+    label = torch.Tensor(data=
+        [token_to_id[START]] + [token_to_id[i] for i in dummy_gt] + [token_to_id[END]]).long()
     
     image = image.float().to(device)
-    
+    image = image.unsqueeze(0)
     expected = label.to(device)
-
+    expected = expected.unsqueeze(0)
+    
     output = model(image, expected, False, teacher_forcing_ratio=0.0)
     decoded_values = output.transpose(1,2)
     _, sequence = torch.topk(decoded_values, 1, dim=1)
