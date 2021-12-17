@@ -2,6 +2,7 @@ import os
 import time
 from glob import glob
 from tqdm import tqdm
+import jamotools
 
 import torch
 from torch import nn, optim
@@ -10,8 +11,7 @@ from torch.utils.data import DataLoader
 from utils import id_to_string, set_seed
 from dataset import MyDataset, get_valid_transforms
 from model import SWIN
-
-import matplotlib.pyplot as plt
+import jamo
 
 START = "<SOS>"
 END = "<EOS>"
@@ -29,7 +29,7 @@ def main(config):
 
     transforms = get_valid_transforms()
 
-    image_paths = sorted(glob('/content/data/크랍이미지/*')[:10]) # glob(config.image_paths)
+    image_paths = sorted(glob(config.image_paths)) # glob(config.image_paths)
 
     test_dataset = MyDataset(
         image_paths, transforms=transforms, mode='test'
@@ -50,7 +50,7 @@ def main(config):
 
     results = []
     with torch.no_grad():
-        for image, label in tqdm(test_loader):
+        for image, label in test_loader:
             image = image.float().to(device)
 
             expected = label.to(device)
@@ -61,14 +61,17 @@ def main(config):
             sequence = sequence.squeeze(1) # [B, MAX_LEN]
 
             sequence_str = id_to_string(sequence, test_loader,do_eval=1)
-            print(sequence_str)
+            
+            print(''.join(sequence_str).replace('b_', ''))
 
+            # with open('/content/drive/MyDrive/recognition/test.txt', 'a', encoding='utf-8') as f:
+            #     f.write(''.join(sequence_str).replace('b_', '').replace('_', ''))
 
     
 if __name__ == '__main__':
     class CFG:
         seed = 21
         checkpoint_path = './pth/model_8_98.18.pth'
-        image_paths = '/content/data/크랍이미지/*'
+        image_paths = '/content/drive/MyDrive/recognition/test/*'
     config = CFG()
     main(config)

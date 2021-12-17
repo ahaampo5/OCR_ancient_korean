@@ -194,7 +194,7 @@ def main(config):
 
     random.shuffle(image_paths)
 
-    train_image_paths = image_paths[len(image_paths)//2:]
+    train_image_paths = image_paths[len(image_paths)//3:]
 
     valid_image_paths = image_paths[:len(image_paths)//5]
 
