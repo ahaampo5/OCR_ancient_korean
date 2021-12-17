@@ -7,6 +7,8 @@ let selectHangeul = document.getElementById("select-hangeul");
 selectHangeul.addEventListener("click", async () => {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     window.close();
+    let detection = document.getElementById("detection").value;
+    let recognition = document.getElementById("recognition").value;
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       function: setHangeulBox,

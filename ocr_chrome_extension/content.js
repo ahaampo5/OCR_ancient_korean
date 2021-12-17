@@ -1,4 +1,4 @@
-const SERVERL_URL ='http://172.31.32.234:6006/recognize';
+const SERVERL_URL ='http://ec2-3-34-44-46.ap-northeast-2.compute.amazonaws.com:6006/recognize';
 
 fetch(chrome.runtime.getURL('/template.html')).then(r => r.text()).then(html => {
     document.body.insertAdjacentHTML('beforeend', html);
