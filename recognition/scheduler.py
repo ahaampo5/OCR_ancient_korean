@@ -137,7 +137,7 @@ class TeacherForcingScheduler:
         return x
 
     @staticmethod
-    def _get_cosine(num_steps: int, tf_max: float):  # NOTE. 아직 tf_min 미적용. 무조건 0으로 하강함
+    def _get_cosine(num_steps: int, tf_max: float): 
         factor = tf_max / 2
         x = np.linspace(0, np.pi, num_steps)
         x = np.cos(x)

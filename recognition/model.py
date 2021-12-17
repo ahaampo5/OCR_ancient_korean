@@ -4,12 +4,10 @@ import torch.nn.functional as F
 import numpy as np
 import math
 import random
+from queue import PriorityQueue
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 import torch.utils.checkpoint as checkpoint
 from torch.utils.data import DataLoader
-from six.moves import urllib
-
-import timm
 
 START = "<SOS>"
 END = "<EOS>"
