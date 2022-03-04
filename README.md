@@ -15,11 +15,11 @@
 ### Metric
 
 - 평가 척도
-  - Object Detection : IoU
+  - Object Detection : IoU@70 ( 글자의 대부분을 추출해야하기 때문에 70%이상 겹쳐야 맞은 것으로 평가 )
   - Recognition : Word accuracy ( 자음, 모음, 받침이 모두 맞을 때만 맞은 것으로 평가 )
 
 # Project Result
-- 대상 400만원
+- 대상 - 400만원
 
 ### Coding Explanation
 - Detection : MMDetection 패키지에 맞추어 작성된 코드입니다.
